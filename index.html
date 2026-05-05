@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixus Management OPC - Manpower Request Forms</title>
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', Arial, Helvetica, sans-serif;
+            background: #f0f2f5;
+            padding: 40px 20px;
+            color: #000;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            color: #1a1a2e;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .page-header p {
+            color: #666;
+            margin-top: 6px;
+            font-size: 14px;
+        }
+
+        .forms-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .form-wrapper {
+            background: #fff;
+            padding: 0;
+            width: 900px;
+            max-width: 100%;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-outer-border {
+            border: 3px solid #000;
+        }
+
+        .company-header {
+            border-bottom: 2px solid #000;
+            padding: 18px 20px 14px;
+            text-align: center;
+        }
+
+        .company-header h2 {
+            font-size: 28px;
+            font-weight: 900;
+            color: #0066b3;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .form-title {
+            border-bottom: 2px solid #000;
+            padding: 8px 20px;
+            text-align: center;
+        }
+
+        .form-title h3 {
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .dept-date-row {
+            display: flex;
+            border-bottom: 2px solid #000;
+        }
+
+        .dept-date-row .dept-cell {
+            flex: 1;
+            padding: 6px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dept-date-row .date-cell {
+            padding: 6px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-left: 2px solid #000;
+            min-width: 220px;
+        }
+
+        .form-input {
+            border: none;
+            border-bottom: 1px solid #999;
+            outline: none;
+            font-family: inherit;
+            font-size: 13px;
+            padding: 2px 4px;
+            background: transparent;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .form-input:focus {
+            border-bottom-color: #0066b3;
+            background: #f7fbff;
+        }
+
+        .main-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .main-table th {
+            border: 2px solid #000;
+            padding: 10px 8px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: center;
+            vertical-align: middle;
+            background: #fff;
+            line-height: 1.3;
+        }
+
+        .main-table td {
+            border: 2px solid #000;
+            padding: 0;
+            vertical-align: top;
+        }
+
+        .main-table .table-input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 13px;
+            padding: 8px;
+            background: transparent;
+            resize: none;
+            min-height: 280px;
+        }
+
+        .main-table .table-input:focus {
+            background: #f7fbff;
+        }
+
+        .main-table .table-input-short {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 13px;
+            padding: 8px;
+            background: transparent;
+            resize: none;
+            min-height: 220px;
+        }
+
+        .main-table .table-input-short:focus {
+            background: #f7fbff;
+        }
+
+        .justification-row {
+            display: flex;
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
+        }
+
+        .justification-row .label {
+            font-size: 13px;
+            font-weight: 700;
+            padding: 8px 12px;
+            border-right: 2px solid #000;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+
+        .justification-row .value {
+            flex: 1;
+            padding: 0;
+        }
+
+        .justification-row .value input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 13px;
+            padding: 8px;
+            background: transparent;
+        }
+
+        .justification-row .value input:focus {
+            background: #f7fbff;
+        }
+
+        .signature-section {
+            border-bottom: 2px solid #000;
+        }
+
+        .sig-row {
+            display: flex;
+        }
+
+        .sig-left {
+            flex: 1;
+            padding: 6px 10px;
+            border-right: 2px solid #000;
+        }
+
+        .sig-right {
+            flex: 1;
+            padding: 6px 10px;
+        }
+
+        .sig-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .sig-field {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 2px;
+            font-size: 12px;
+        }
+
+        .sig-field span {
+            white-space: nowrap;
+            font-size: 12px;
+        }
+
+        .sig-input {
+            border: none;
+            border-bottom: 1px solid #000;
+            outline: none;
+            font-family: inherit;
+            font-size: 12px;
+            padding: 2px 4px;
+            flex: 1;
+            min-width: 0;
+            background: transparent;
+        }
+
+        .sig-input:focus {
+            background: #f7fbff;
+            border-bottom-color: #0066b3;
+        }
+
+        .dashed-sep {
+            border-bottom: 2px dashed #000;
+        }
+
+        .hr-comments-header {
+            text-align: center;
+            padding: 6px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-bottom: 2px solid #000;
+        }
+
+        .hr-comments-body {
+            text-align: center;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-bottom: 2px solid #000;
+            letter-spacing: 0.3px;
+        }
+
+        .hr-comments-area {
+            padding: 0;
+            border-bottom: 2px solid #000;
+        }
+
+        .hr-comments-area textarea {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 13px;
+            padding: 10px;
+            min-height: 80px;
+            resize: vertical;
+            background: transparent;
+        }
+
+        .hr-comments-area textarea:focus {
+            background: #f7fbff;
+        }
+
+        .note-footer {
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .note-footer strong {
+            color: #000;
+        }
+
+        .vp-label {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .form2-company-header {
+            text-align: center;
+            padding: 14px 0;
+            border: 3px solid #000;
+            border-bottom: none;
+        }
+
+        .form2-company-header h2 {
+            font-size: 28px;
+            font-weight: 900;
+            color: #0066b3;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .form2-outer-border {
+            border: 3px solid #000;
+        }
+
+        .form2-title {
+            border: 3px solid #000;
+            margin: 8px;
+            padding: 8px 20px;
+            text-align: center;
+        }
+
+        .form2-title h3 {
+            font-size: 17px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .form2-dept-row {
+            padding: 4px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 2px solid #000;
+        }
+
+        .remarks-row {
+            display: flex;
+            border-top: 0;
+            border-bottom: 2px solid #000;
+        }
+
+        .remarks-row .label {
+            font-size: 13px;
+            font-weight: 700;
+            font-style: italic;
+            padding: 8px 12px;
+            border-right: 2px solid #000;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+
+        .remarks-row .value {
+            flex: 1;
+        }
+
+        .remarks-row .value input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 13px;
+            padding: 8px;
+            background: transparent;
+        }
+
+        .remarks-row .value input:focus {
+            background: #f7fbff;
+        }
+
+        .form-separator {
+            width: 100%;
+            max-width: 900px;
+            height: 1px;
+            background: #ddd;
+        }
+
+        /* Submit Button */
+        .submit-btn-container {
+            text-align: center;
+            padding: 16px 20px 20px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #0066b3, #004e8c);
+            color: #fff;
+            border: none;
+            padding: 14px 48px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 14px rgba(0, 102, 179, 0.3);
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #0077cc, #005aa0);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0, 102, 179, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .submit-btn .spinner {
+            display: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .submit-btn.loading .spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            padding: 16px 24px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            z-index: 9999;
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+            max-width: 400px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, #00b894, #00a381);
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .toast.info {
+            background: linear-gradient(135deg, #0066b3, #004e8c);
+        }
+
+        @media (max-width: 940px) {
+            .form-wrapper {
+                width: 100%;
+            }
+        }
+
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+            }
+
+            .page-header {
+                display: none;
+            }
+
+            .form-wrapper {
+                box-shadow: none;
+                page-break-inside: avoid;
+                margin-bottom: 40px;
+            }
+
+            .submit-btn-container {
+                display: none;
+            }
+
+            .toast {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="toast" class="toast"></div>
+
+    <div class="page-header">
+        <h1>FIXUS MANAGEMENT OPC</h1>
+        <p>Manpower Request Forms</p>
+    </div>
+
+    <div class="forms-container">
+
+        <!-- FORM 1: MANPOWER REQUEST FORM -->
+        <form class="form-wrapper" id="manpowerRequestForm" onsubmit="submitForm1(event)">
+            <div class="form-outer-border">
+                <div class="company-header">
+                    <h2>FIXUS MANAGEMENT OPC</h2>
+                </div>
+                <div class="form-title">
+                    <h3>Manpower Request Form</h3>
+                </div>
+
+                <div class="dept-date-row">
+                    <div class="dept-cell">DEPARTMENT: <input type="text" class="form-input" id="form1-department"
+                            name="department"></div>
+                    <div class="date-cell">DATE : <input type="text" class="form-input" id="form1-date" name="date">
+                    </div>
+                </div>
+
+                <table class="main-table">
+                    <thead>
+                        <tr>
+                            <th style="width:16%">Position Title</th>
+                            <th style="width:12%">No. of<br>Position</th>
+                            <th style="width:24%">Required<br>Qualification/<br>Requirements</th>
+                            <th style="width:16%">Date Needed</th>
+                            <th style="width:16%">Contract<br>Duration</th>
+                            <th style="width:16%">Others</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><textarea class="table-input" id="form1-position" name="position_title"></textarea></td>
+                            <td><textarea class="table-input" id="form1-no-position" name="no_of_position"></textarea>
+                            </td>
+                            <td><textarea class="table-input" id="form1-qualification" name="qualifications"></textarea>
+                            </td>
+                            <td><textarea class="table-input" id="form1-date-needed" name="date_needed"></textarea></td>
+                            <td><textarea class="table-input" id="form1-contract-duration"
+                                    name="contract_duration"></textarea></td>
+                            <td><textarea class="table-input" id="form1-others" name="others"></textarea></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="justification-row">
+                    <div class="label">Justification:</div>
+                    <div class="value"><input type="text" id="form1-justification" name="justification"></div>
+                </div>
+
+                <div class="signature-section">
+                    <div class="sig-row">
+                        <div class="sig-left">
+                            <div class="sig-label">REQUESTING PROJECT ONLY</div>
+                            <div class="sig-field"><span>REQUESTED BY:</span><input type="text" class="sig-input"
+                                    id="form1-requested-by" name="requested_by"></div>
+                            <div class="sig-field"><span>Signature/Date:</span><input type="text" class="sig-input"
+                                    id="form1-req-sig-date" name="req_sig_date"></div>
+                        </div>
+                        <div class="sig-right">
+                            <div class="sig-label" style="visibility:hidden">_</div>
+                            <div class="sig-field"><span style="font-weight:700">NOTED BY:</span><input type="text"
+                                    class="sig-input" id="form1-noted-by" name="noted_by"></div>
+                            <div class="sig-field"><span>Signature/Date:</span><input type="text" class="sig-input"
+                                    id="form1-noted-sig-date" name="noted_sig_date"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashed-sep"></div>
+
+                <div class="signature-section">
+                    <div class="sig-row">
+                        <div class="sig-left">
+                            <div class="sig-field" style="margin-top:4px"><span>APPROVED BY:</span><input type="text"
+                                    class="sig-input" id="form1-approved-by" name="approved_by"></div>
+                            <div class="sig-field"><span>Signature/Date:</span><input type="text" class="sig-input"
+                                    id="form1-approved-sig-date" name="approved_sig_date"></div>
+                            <div class="vp-label">VP- Operations</div>
+                        </div>
+                        <div class="sig-right">
+                            <div class="sig-label">FOR USE OF HR PERSONNEL</div>
+                            <div class="sig-field"><span>RECEIVED BY:</span><input type="text" class="sig-input"
+                                    id="form1-received-by" name="received_by"></div>
+                            <div class="sig-field"><span>Signature/Date:</span><input type="text" class="sig-input"
+                                    id="form1-received-sig-date" name="received_sig_date"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashed-sep"></div>
+                <div class="hr-comments-header">FOR USE OF HR PERSONNEL</div>
+                <div class="hr-comments-body">( COMMENTS ON ACTIONS TAKEN ON ABOVE REQUESTS )</div>
+                <div class="hr-comments-area"><textarea id="form1-hr-comments" name="hr_comments"></textarea></div>
+                <div class="note-footer"><strong>NOTE:</strong> This form can be requested to HR Department only and
+                    cannot be reproduced.</div>
+
+            </div>
+        </form>
+        <div class="submit-btn-container">
+            <button type="button" class="submit-btn" id="form1-submit-btn" onclick="document.getElementById('manpowerRequestForm').requestSubmit()">
+                <span class="spinner"></span>Submit Request
+            </button>
+        </div>
+
+        <div class="form-separator"></div>
+
+        <!-- FORM 2: MANPOWER REQUEST (Workers) -->
+        <form class="form-wrapper" id="manpowerRequestWorkers" onsubmit="submitForm2(event)">
+            <div class="form2-company-header">
+                <h2>FIXUS MANAGEMENT OPC</h2>
+            </div>
+            <div class="form2-outer-border">
+                <div class="form2-title">
+                    <h3>Manpower Request (Workers)</h3>
+                </div>
+
+                <div class="form2-dept-row">DEPARTMENT: <input type="text" class="form-input" id="form2-department"
+                        name="department"></div>
+
+                <table class="main-table">
+                    <thead>
+                        <tr>
+                            <th style="width:15%">No. of<br>Manpower</th>
+                            <th style="width:35%">Particulars</th>
+                            <th style="width:22%">Date Needed</th>
+                            <th style="width:28%">Time/Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><textarea class="table-input-short" id="form2-no-manpower"
+                                    name="no_of_manpower"></textarea></td>
+                            <td><textarea class="table-input-short" id="form2-particulars"
+                                    name="particulars"></textarea></td>
+                            <td><textarea class="table-input-short" id="form2-date-needed"
+                                    name="date_needed"></textarea></td>
+                            <td><textarea class="table-input-short" id="form2-time-location"
+                                    name="time_location"></textarea></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="remarks-row">
+                    <div class="label">Remarks:</div>
+                    <div class="value"><input type="text" id="form2-remarks" name="remarks"></div>
+                </div>
+
+                <div class="signature-section">
+                    <div class="sig-row">
+                        <div class="sig-left">
+                            <div class="sig-label">REQUESTING DEPT. ONLY</div>
+                            <div class="sig-field"><span>REQUESTED BY:</span><input type="text" class="sig-input"
+                                    id="form2-requested-by" name="requested_by"></div>
+                            <div class="sig-field"><span>Signature/Date:</span><input type="text" class="sig-input"
+                                    id="form2-req-sig-date" name="req_sig_date"></div>
+                        </div>
+                        <div class="sig-right">
+                            <div class="sig-field" style="margin-top:4px"><span style="font-weight:700">NOTED
+                                    BY</span><input type="text" class="sig-input" id="form2-noted-by" name="noted_by">
+                            </div>
+                            <div class="sig-field" style="justify-content:center;margin-top:4px"><span
+                                    style="font-weight:700">Department Head</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashed-sep"></div>
+
+                <div class="signature-section" style="border-bottom:none">
+                    <div class="sig-row">
+                        <div class="sig-left">
+                            <div style="height:8px"></div>
+                            <div class="sig-field"><span>APPROVED BY:</span><input type="text" class="sig-input"
+                                    id="form2-approved-by" name="approved_by"></div>
+                            <div style="height:8px"></div>
+                        </div>
+                        <div class="sig-right">
+                            <div class="sig-label">FOR USE OF HR PERSONNEL</div>
+                            <div class="sig-field"><span>RECEIVED BY:</span><input type="text" class="sig-input"
+                                    id="form2-received-by" name="received_by"></div>
+                            <div class="sig-field"><span>Signature/Date:</span><input type="text" class="sig-input"
+                                    id="form2-received-sig-date" name="received_sig_date"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+        <div class="submit-btn-container">
+            <button type="button" class="submit-btn" id="form2-submit-btn" onclick="document.getElementById('manpowerRequestWorkers').requestSubmit()">
+                <span class="spinner"></span>Submit Request
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // ========================================================
+        // EmailJS Configuration — Replace these with your credentials
+        // ========================================================
+        const EMAILJS_PUBLIC_KEY = 'z6NE2aQp5hAnDuYwS';
+        const EMAILJS_SERVICE_ID = 'service_pkjcxh6';
+        const EMAILJS_TEMPLATE_ID = 'template_d5uyuy5';
+
+        // Initialize EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        // Toast notification
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type;
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        // Collect form data as a flat object
+        function collectFormData(formEl) {
+            const data = {};
+            formEl.querySelectorAll('input, textarea').forEach(el => {
+                const key = el.name || el.id;
+                if (key) data[key] = el.value.trim();
+            });
+            return data;
+        }
+
+        // Submit Form 1 — Manpower Request Form
+        async function submitForm1(e) {
+            e.preventDefault();
+            const btn = document.getElementById('form1-submit-btn');
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            const formData = collectFormData(document.getElementById('manpowerRequestForm'));
+            formData.form_type = 'Manpower Request Form';
+
+            try {
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, formData);
+                showToast('✅ Manpower Request Form submitted successfully!', 'success');
+            } catch (err) {
+                console.error('EmailJS Error:', err);
+                showToast('❌ Failed to submit. Check your EmailJS credentials.', 'error');
+            } finally {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            }
+        }
+
+        // Submit Form 2 — Manpower Request (Workers)
+        async function submitForm2(e) {
+            e.preventDefault();
+            const btn = document.getElementById('form2-submit-btn');
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            const formData = collectFormData(document.getElementById('manpowerRequestWorkers'));
+            formData.form_type = 'Manpower Request (Workers)';
+
+            try {
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, formData);
+                showToast('✅ Workers Request submitted successfully!', 'success');
+            } catch (err) {
+                console.error('EmailJS Error:', err);
+                showToast('❌ Failed to submit. Check your EmailJS credentials.', 'error');
+            } finally {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
