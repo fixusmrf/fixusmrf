@@ -515,12 +515,299 @@
             background: linear-gradient(135deg, #0066b3, #004e8c);
         }
 
+        /* ============================================
+           RESPONSIVE BREAKPOINTS
+           ============================================ */
+
         @media (max-width: 940px) {
             .form-wrapper {
                 width: 100%;
             }
         }
 
+        /* --- Tablet & Small Screens --- */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 10px;
+            }
+
+            .page-header {
+                margin-bottom: 24px;
+            }
+
+            .page-header h1 {
+                font-size: 22px;
+            }
+
+            .page-header p {
+                font-size: 13px;
+            }
+
+            .forms-container {
+                gap: 36px;
+            }
+
+            .company-header h2,
+            .form2-company-header h2 {
+                font-size: 20px;
+                letter-spacing: 1px;
+            }
+
+            .form-title h3 {
+                font-size: 13px;
+            }
+
+            .form2-title h3 {
+                font-size: 14px;
+            }
+
+            .form2-title {
+                margin: 6px;
+                padding: 6px 12px;
+            }
+
+            /* Stack dept/date row vertically */
+            .dept-date-row {
+                flex-direction: column;
+            }
+
+            .dept-date-row .date-cell {
+                border-left: none;
+                border-top: 2px solid #000;
+                min-width: unset;
+            }
+
+            /* Make table headers scroll horizontally or reflow */
+            .main-table th {
+                font-size: 10px;
+                padding: 6px 4px;
+            }
+
+            .main-table .table-input,
+            .main-table .table-input-short {
+                font-size: 14px;
+                padding: 10px 8px;
+                min-height: 140px;
+            }
+
+            /* Signature sections stack */
+            .sig-row {
+                flex-direction: column;
+            }
+
+            .sig-left {
+                border-right: none;
+                border-bottom: 1px solid #ccc;
+                padding: 10px;
+            }
+
+            .sig-right {
+                padding: 10px;
+            }
+
+            .sig-input {
+                font-size: 14px;
+                padding: 6px 4px;
+            }
+
+            .sig-field {
+                flex-wrap: wrap;
+                gap: 2px;
+            }
+
+            .sig-field span {
+                font-size: 11px;
+            }
+
+            /* Submit button full-width */
+            .submit-btn {
+                width: 100%;
+                padding: 16px;
+                font-size: 14px;
+            }
+
+            .submit-btn-container {
+                padding: 12px 0 16px;
+            }
+
+            /* Toast centered */
+            .toast {
+                left: 16px;
+                right: 16px;
+                max-width: none;
+                text-align: center;
+                transform: translateY(-120%);
+            }
+
+            .toast.show {
+                transform: translateY(0);
+            }
+
+            /* Justification / Remarks */
+            .justification-row,
+            .remarks-row {
+                flex-direction: column;
+            }
+
+            .justification-row .label,
+            .remarks-row .label {
+                border-right: none;
+                border-bottom: 1px solid #999;
+                padding: 6px 10px;
+            }
+
+            .justification-row .value input,
+            .remarks-row .value input {
+                font-size: 14px;
+                padding: 10px 8px;
+            }
+
+            /* HR Comments */
+            .hr-comments-header {
+                font-size: 12px;
+                padding: 6px 8px;
+            }
+
+            .hr-comments-body {
+                font-size: 11px;
+                padding: 6px 8px;
+            }
+
+            .hr-comments-area textarea {
+                font-size: 14px;
+                padding: 10px 8px;
+                min-height: 70px;
+            }
+
+            .note-footer {
+                font-size: 11px;
+                padding: 10px 12px;
+            }
+        }
+
+        /* --- Phone Screens (≤480px) — stacked table layout --- */
+        @media (max-width: 480px) {
+            body {
+                padding: 12px 6px;
+            }
+
+            .page-header h1 {
+                font-size: 18px;
+            }
+
+            .company-header h2,
+            .form2-company-header h2 {
+                font-size: 17px;
+                letter-spacing: 0.5px;
+            }
+
+            .company-header {
+                padding: 12px 10px 10px;
+            }
+
+            .form-outer-border,
+            .form2-outer-border {
+                border-width: 2px;
+            }
+
+            .form2-company-header {
+                border-width: 2px;
+            }
+
+            /* Convert Form 1 table to stacked cards */
+            .main-table thead {
+                display: none;
+            }
+
+            .main-table tbody tr {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .main-table td {
+                display: block;
+                border: none;
+                border-bottom: 1px solid #ccc;
+                position: relative;
+            }
+
+            .main-table td:last-child {
+                border-bottom: 2px solid #000;
+            }
+
+            /* Add field labels via data attributes */
+            .main-table td::before {
+                content: attr(data-label);
+                display: block;
+                font-size: 10px;
+                font-weight: 700;
+                text-transform: uppercase;
+                color: #555;
+                padding: 8px 8px 0;
+                letter-spacing: 0.5px;
+            }
+
+            .main-table .table-input,
+            .main-table .table-input-short {
+                min-height: 80px;
+                font-size: 15px;
+                padding: 6px 8px 10px;
+            }
+
+            /* Dept / Date fields */
+            .dept-date-row .dept-cell,
+            .dept-date-row .date-cell {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+
+            .form-input {
+                font-size: 15px;
+                padding: 4px 4px;
+            }
+
+            /* Form 2 dept row */
+            .form2-dept-row {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+
+            .form2-dept-row .form-input {
+                font-size: 15px;
+            }
+
+            /* Signature */
+            .sig-label {
+                font-size: 10px;
+            }
+
+            .sig-field span {
+                font-size: 10px;
+                min-width: auto;
+            }
+
+            .sig-input {
+                font-size: 15px;
+            }
+
+            .vp-label {
+                font-size: 10px;
+            }
+
+            .form-separator {
+                margin: 0;
+            }
+
+            .submit-btn {
+                border-radius: 6px;
+                padding: 14px;
+                font-size: 13px;
+            }
+        }
+
+        /* ============================================
+           PRINT STYLES
+           ============================================ */
         @media print {
             body {
                 background: #fff;
@@ -542,6 +829,24 @@
             }
 
             .toast {
+                display: none;
+            }
+
+            /* Restore table headers for print even on small paper */
+            .main-table thead {
+                display: table-header-group;
+            }
+
+            .main-table tbody tr {
+                display: table-row;
+            }
+
+            .main-table td {
+                display: table-cell;
+                border: 2px solid #000;
+            }
+
+            .main-table td::before {
                 display: none;
             }
         }
@@ -589,15 +894,15 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><textarea class="table-input" id="form1-position" name="position_title"></textarea></td>
-                            <td><textarea class="table-input" id="form1-no-position" name="no_of_position"></textarea>
+                            <td data-label="Position Title"><textarea class="table-input" id="form1-position" name="position_title"></textarea></td>
+                            <td data-label="No. of Position"><textarea class="table-input" id="form1-no-position" name="no_of_position"></textarea>
                             </td>
-                            <td><textarea class="table-input" id="form1-qualification" name="qualifications"></textarea>
+                            <td data-label="Required Qualification / Requirements"><textarea class="table-input" id="form1-qualification" name="qualifications"></textarea>
                             </td>
-                            <td><textarea class="table-input" id="form1-date-needed" name="date_needed"></textarea></td>
-                            <td><textarea class="table-input" id="form1-contract-duration"
+                            <td data-label="Date Needed"><textarea class="table-input" id="form1-date-needed" name="date_needed"></textarea></td>
+                            <td data-label="Contract Duration"><textarea class="table-input" id="form1-contract-duration"
                                     name="contract_duration"></textarea></td>
-                            <td><textarea class="table-input" id="form1-others" name="others"></textarea></td>
+                            <td data-label="Others"><textarea class="table-input" id="form1-others" name="others"></textarea></td>
                         </tr>
                     </tbody>
                 </table>
@@ -688,13 +993,13 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><textarea class="table-input-short" id="form2-no-manpower"
+                            <td data-label="No. of Manpower"><textarea class="table-input-short" id="form2-no-manpower"
                                     name="no_of_manpower"></textarea></td>
-                            <td><textarea class="table-input-short" id="form2-particulars"
+                            <td data-label="Particulars"><textarea class="table-input-short" id="form2-particulars"
                                     name="particulars"></textarea></td>
-                            <td><textarea class="table-input-short" id="form2-date-needed"
+                            <td data-label="Date Needed"><textarea class="table-input-short" id="form2-date-needed"
                                     name="date_needed"></textarea></td>
-                            <td><textarea class="table-input-short" id="form2-time-location"
+                            <td data-label="Time / Location"><textarea class="table-input-short" id="form2-time-location"
                                     name="time_location"></textarea></td>
                         </tr>
                     </tbody>
